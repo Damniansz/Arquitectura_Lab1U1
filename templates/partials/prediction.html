@@ -1,0 +1,108 @@
+{% if prediction_features %}
+<section class="wm-card mt-4" aria-labelledby="prediction-title">
+  <div class="wm-card-head">
+    <h2 id="prediction-title" class="h5 mb-1">
+      Predicción de lluvia
+    </h2>
+
+    <p class="mb-0 small wm-muted">
+      Ingresa los datos de una nueva observación meteorológica.
+    </p>
+  </div>
+
+  <div class="wm-card-body">
+    {% set labels = {
+      "temperature": "Temperatura",
+      "humidity": "Humedad",
+      "pressure": "Presión",
+      "wind_speed": "Velocidad del viento"
+    } %}
+
+    <p id="prediction-help" class="small wm-muted">
+      Utiliza las mismas unidades que el dataset de entrenamiento.
+      Todos los campos son obligatorios.
+    </p>
+
+    <form
+      action="{{ url_for('predict') }}"
+      method="post"
+      data-loading="Generando predicción…"
+      aria-describedby="prediction-help"
+    >
+      <div class="row g-3">
+        {% for feature in prediction_features %}
+        <div class="col-12 col-md-6">
+          <label
+            class="form-label"
+            for="feature-{{ loop.index }}"
+          >
+            {{ labels.get(feature, feature) }}
+          </label>
+
+          <input
+            class="form-control"
+            id="feature-{{ loop.index }}"
+            name="{{ feature }}"
+            type="{{ 'number' if feature in labels else 'text' }}"
+            {% if feature in labels %}step="any"{% endif %}
+            value="{{ request.form.get(feature, '') }}"
+            required
+          />
+        </div>
+        {% endfor %}
+      </div>
+
+      <button class="btn btn-primary mt-4" type="submit">
+        Predecir lluvia
+      </button>
+    </form>
+
+    {% if prediction_result %}
+      {% set prediction_label = prediction_result.label | lower %}
+      {% set is_dry = prediction_label == "no" %}
+
+    <div
+      class="wm-prediction-result{% if is_dry %} wm-prediction-result--dry{% endif %}"
+      role="status"
+      aria-live="polite"
+    >
+      <div class="wm-prediction-icon" aria-hidden="true">
+        {% if prediction_label == "yes" %}
+          <i class="bi bi-cloud-rain-fill"></i>
+        {% elif prediction_label == "no" %}
+          <i class="bi bi-sun-fill"></i>
+        {% else %}
+          <i class="bi bi-info-circle-fill"></i>
+        {% endif %}
+      </div>
+
+      <div>
+        <p class="small mb-1">Resultado del modelo</p>
+
+        <h3 class="wm-prediction-title">
+          {% if prediction_label == "yes" %}
+            Se predice lluvia
+          {% elif prediction_label == "no" %}
+            No se predice lluvia
+          {% else %}
+            Clase predicha: {{ prediction_result.label }}
+          {% endif %}
+        </h3>
+
+        {% if prediction_result.probability is not none %}
+        <p class="wm-prediction-detail">
+          Probabilidad estimada para la clase predicha:
+          <strong>{{ prediction_result.probability }}%</strong>.
+        </p>
+        {% endif %}
+
+        <p class="small mt-2 mb-0">
+          Esta estimación puede ser incorrecta y no garantiza
+          el resultado meteorológico.
+        </p>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endif %}

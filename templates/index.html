@@ -24,6 +24,7 @@
   <body class="d-flex flex-column min-vh-100">
     {# Pantalla 2 (resultados) cuando hay resultados; si no, pantalla 1 (carga)
     #} {% set show_results = results %}
+    {% set show_prediction = prediction_features %}
 
     <!-- ================= HEADER ================= -->
     <nav class="navbar navbar-dark wm-bar wm-bar-top">
@@ -55,7 +56,7 @@
     {% endif %}
 
     <main
-      class="container wm-wrap wm-main flex-grow-1{% if not show_results %} wm-center{% endif %}"
+      class="container wm-wrap wm-main flex-grow-1{% if not show_results and not show_prediction %} wm-center{% endif %}"
     >
       {% with messages = get_flashed_messages() %} {% for message in messages %}
       <div
@@ -345,6 +346,7 @@
         </p>
       </section>
       {% endif %} {% endif %}
+      {% include "partials/prediction.html" %}
     </main>
 
     <!-- ================= FOOTER ================= -->
@@ -361,9 +363,9 @@
         >
       </div>
     </footer>
-
+    {% include "partials/loading.html" %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
+    <script >
       (function () {
         // Año actual tomado del sistema
         var year = document.getElementById("year");
@@ -412,32 +414,10 @@
             }
           });
         }
-
-        // Botones con estado de carga mientras el servidor trabaja
-        var forms = document.querySelectorAll("form[data-loading]");
-        forms.forEach(function (form) {
-          form.addEventListener("submit", function () {
-            var btn = form.querySelector('button[type="submit"]');
-            if (!btn) return;
-            btn.dataset.label = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML =
-              '<span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>' +
-              form.dataset.loading;
-          });
-        });
-        window.addEventListener("pageshow", function (e) {
-          if (!e.persisted) return;
-          forms.forEach(function (form) {
-            var btn = form.querySelector('button[type="submit"]');
-            if (btn && btn.dataset.label) {
-              btn.innerHTML = btn.dataset.label;
-              btn.disabled = false;
-            }
-          });
-        });
+        
       })();
     </script>
+    <script src="{{ url_for('static', filename='js/processing.js') }}"></script>
   </body>
 </html>
 

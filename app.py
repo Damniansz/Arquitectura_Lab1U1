@@ -31,10 +31,26 @@ TARGET = "rain"
 
 @app.route("/", methods=["GET"])
 def index():
+    prediction_features = None
+
+    if MODEL_PATH.exists():
+        try:
+            saved = joblib.load(MODEL_PATH)
+            prediction_features = saved["features"]
+
+        except Exception:
+            app.logger.exception(
+                "No se pudo recuperar el modelo guardado"
+            )
+            flash(
+                "No se pudo cargar el modelo guardado. "
+                "Entrena nuevamente con un archivo CSV."
+            )
+
     return render_template(
         "index.html",
         results=None,
-        prediction_features=None,
+        prediction_features=prediction_features,
         prediction_result=None
     )
 

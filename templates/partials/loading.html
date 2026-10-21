@@ -1,0 +1,40 @@
+<div
+  class="modal"
+  id="processing-modal"
+  tabindex="-1"
+  aria-labelledby="processing-title"
+  aria-describedby="processing-description"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content wm-processing">
+      <div class="modal-body text-center p-4 p-md-5">
+        <div class="wm-processing-icon" aria-hidden="true">
+          <span class="spinner-border"></span>
+        </div>
+
+        <h2 id="processing-title" class="h4 mt-4">
+          Procesando solicitud…
+        </h2>
+
+        <p id="processing-description" class="wm-muted mb-4">
+          Espera mientras se completa la operación.
+        </p>
+
+        <div class="wm-loading-track" aria-hidden="true">
+          <div class="wm-loading-bar"></div>
+        </div>
+
+        <p class="small wm-muted mt-3 mb-0">
+          El tiempo de espera depende de la operación.
+        </p>
+
+        <p
+          id="processing-status"
+          class="visually-hidden"
+          role="status"
+          aria-live="polite"
+        ></p>
+      </div>
+    </div>
+  </div>
+</div>

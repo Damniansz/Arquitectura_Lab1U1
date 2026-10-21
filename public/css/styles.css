@@ -398,3 +398,135 @@ section[id] {
     transition: none;
   }
 }
+
+/* Modal de procesamiento */
+.wm-processing {
+  border: 0;
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(10, 42, 102, 0.2);
+}
+
+.wm-processing-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--blue-50);
+  color: var(--blue-600);
+}
+
+.wm-processing-icon .spinner-border {
+  width: 38px;
+  height: 38px;
+  border-width: 4px;
+}
+
+/* Indicador de actividad, sin porcentaje */
+.wm-loading-track {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--blue-100);
+}
+
+.wm-loading-bar {
+  width: 35%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--blue-600);
+  animation: wm-loading 1.4s ease-in-out infinite;
+}
+
+@keyframes wm-loading {
+  from {
+    transform: translateX(-110%);
+  }
+
+  to {
+    transform: translateX(300%);
+  }
+}
+
+/* Consistencia de las tarjetas */
+.wm-card {
+  box-shadow: 0 5px 18px rgba(10, 42, 102, 0.05);
+}
+
+.form-label {
+  font-weight: 600;
+}
+
+.form-control {
+  min-height: 46px;
+}
+
+.btn:disabled {
+  cursor: wait;
+}
+
+/* Tarjeta de resultado */
+.wm-prediction-result {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+  margin-top: 1.5rem;
+  border: 1px solid var(--blue-300);
+  border-left: 5px solid var(--blue-600);
+  border-radius: 12px;
+  background: var(--blue-50);
+  color: var(--ink);
+}
+
+.wm-prediction-icon {
+  flex-shrink: 0;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.wm-prediction-result--dry {
+  background: #fff8e6;
+  border-color: #e8cf87;
+  border-left-color: #9a6700;
+  color: #634500;
+}
+
+.wm-prediction-title {
+  margin-bottom: 0.4rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.wm-prediction-detail {
+  margin-bottom: 0;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 576px) {
+  .wm-prediction-result {
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+
+  .wm-prediction-icon {
+    font-size: 1.6rem;
+  }
+}
+
+/* Respeta la preferencia de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  .wm-loading-bar,
+  .wm-processing-icon .spinner-border {
+    animation: none;
+  }
+
+  .wm-loading-bar {
+    width: 100%;
+    opacity: 0.5;
+  }
+}
+.wm-prediction-result[hidden] {
+  display: none;
+}
